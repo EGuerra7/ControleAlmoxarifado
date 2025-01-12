@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum State {
+  COMPLETED
+  LOAN
+}
+
+model Product {
+  id String @id @default(uuid())
+  name String
+  quantity Int
+  localization String
+  category String
+
+  Loans LoanProduct[] 
+
+  @@map("products")
+}
+
+model Loan{
+  id String @id @default(uuid())
+  responsible String
+  state State @default(LOAN)
+  created_at DateTime
+
+  products LoanProduct[]
+  @@map("loans")
+}
+
+model LoanProduct {
+    id String @id @default(uuid())
+    product_id String
+    loan_id String
+    loan_quantity Int
+    return_quantity Int @default(0)
+
+    product Product @relation(fields: [product_id], references: [id])
+    loan Loan @relation(fields: [loan_id], references: [id])
+    
+    @@unique([product_id, loan_id])
+    @@map("loan_products")
+}
+
+model Admin {
+  id String @id @default(uuid())
+  user String @unique
+  password String
+
+  @@map("admin")
+}
