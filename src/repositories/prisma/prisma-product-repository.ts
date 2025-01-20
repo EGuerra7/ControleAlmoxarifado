@@ -3,7 +3,18 @@ import { ProductRepository } from '../product-repository'
 import { prisma } from 'src/lib/prisma'
 
 export class PrismaProductRepostitory implements ProductRepository {
-  async search(name?: string, category?: string) {
+  async search(page: number, name?: string, category?: string) {
+    const totalCount = await prisma.product.count({
+      where: {
+        name: name
+          ? { contains: name.toLowerCase(), mode: 'insensitive' }
+          : undefined,
+        category: category
+          ? { contains: category.toLowerCase(), mode: 'insensitive' }
+          : undefined,
+      },
+    })
+
     const products = await prisma.product.findMany({
       where: {
         name: name
@@ -16,9 +27,11 @@ export class PrismaProductRepostitory implements ProductRepository {
       orderBy: {
         name: 'asc',
       },
+      take: 10,
+      skip: (page - 1) * 10,
     })
 
-    return products
+    return { products, totalCount }
   }
 
   async findById(id: string) {
@@ -32,15 +45,16 @@ export class PrismaProductRepostitory implements ProductRepository {
   }
 
   async findAll(page: number) {
+    const totalCount = await prisma.product.count()
     const products = await prisma.product.findMany({
       orderBy: {
         name: 'asc',
       },
-      take: 20,
-      skip: (page - 1) * 20,
+      take: 10,
+      skip: (page - 1) * 10,
     })
 
-    return products
+    return { products, totalCount }
   }
 
   async save(data: Product) {

@@ -48,8 +48,8 @@ export class PrismaLoanRepostitory implements LoanRepository {
       orderBy: {
         created_at: 'asc',
       },
-      take: 20,
-      skip: (page - 1) * 20,
+      take: 10,
+      skip: (page - 1) * 10,
       include: {
         products: {
           include: {

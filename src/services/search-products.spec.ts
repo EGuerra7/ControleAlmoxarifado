@@ -34,6 +34,7 @@ describe('Search Products Service', () => {
 
   it('should be able to search the product by name', async () => {
     const { products } = await sut.execute({
+      page: 1,
       name: 'Eraser',
     })
 
@@ -43,6 +44,7 @@ describe('Search Products Service', () => {
 
   it('should be able to search the product by category', async () => {
     const { products } = await sut.execute({
+      page: 1,
       category: 'Example 1',
     })
 
@@ -55,11 +57,55 @@ describe('Search Products Service', () => {
 
   it('should be able to search the product by name and category', async () => {
     const { products } = await sut.execute({
+      page: 1,
       name: 'Pen',
       category: 'Example 1',
     })
 
     expect(products).toHaveLength(1)
     expect(products).toEqual([expect.objectContaining({ name: 'Pen' })])
+  })
+
+  it('should be able to search with pagination', async () => {
+    for (let i = 1; i <= 12; i++) {
+      productsRepository.create({
+        name: `product ${i}`,
+        quantity: 10,
+        localization: 'Random',
+        category: 'Random',
+      })
+    }
+
+    const { products } = await sut.execute({
+      page: 2,
+      name: 'product',
+      category: 'Random',
+    })
+
+    expect(products).toHaveLength(2)
+    expect(products).toEqual([
+      expect.objectContaining({ name: 'product 11' }),
+      expect.objectContaining({ name: 'product 12' }),
+    ])
+  })
+
+  it('should be able to see how much items are searched, and ho many pages have', async () => {
+    for (let i = 1; i <= 12; i++) {
+      productsRepository.create({
+        name: `product ${i}`,
+        quantity: 10,
+        localization: 'Random',
+        category: 'Random',
+      })
+    }
+
+    const { meta } = await sut.execute({
+      page: 2,
+      name: 'product',
+      category: 'Random',
+    })
+
+    expect(meta.totalCount).toEqual(12)
+    expect(meta.totalPages).toEqual(2)
   })
 })

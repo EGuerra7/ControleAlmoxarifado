@@ -33,7 +33,7 @@ export class InMemoryLoanRepository implements LoanRepository {
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       )
-      .splice((page - 1) * 20, page * 20)
+      .splice((page - 1) * 10, page * 10)
   }
 
   async updateStatus(id: string, status: State) {

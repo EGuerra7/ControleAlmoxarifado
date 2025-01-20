@@ -58,7 +58,7 @@ describe('Fetch Products Service', () => {
   })
 
   it('should be able to fetch paginated products', async () => {
-    for (let i = 1; i <= 22; i++) {
+    for (let i = 1; i <= 12; i++) {
       loanRepository.create({
         id: `${i}`,
         responsible: 'Anonymous',

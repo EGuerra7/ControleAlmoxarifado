@@ -41,8 +41,8 @@ describe('Fetch Products Service', () => {
     ])
   })
 
-  it('should be able to fetch paginated products', async () => {
-    for (let i = 1; i <= 22; i++) {
+  it('should be able to fetch paginated products and count all', async () => {
+    for (let i = 1; i <= 12; i++) {
       productsRepository.create({
         name: `product ${i}`,
         quantity: 10,
@@ -51,10 +51,12 @@ describe('Fetch Products Service', () => {
       })
     }
 
-    const { products } = await sut.execute({
+    const { products, meta } = await sut.execute({
       page: 2,
     })
 
     expect(products).toHaveLength(2)
+    expect(meta.totalCount).toEqual(12)
+    expect(meta.totalPages).toEqual(2)
   })
 })

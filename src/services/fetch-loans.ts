@@ -10,7 +10,7 @@ interface FetchLoansServiceResponse {
 }
 
 export class FecthLoansService {
-  constructor(private loanRepository: LoanRepository) {}
+  constructor(private loanRepository: LoanRepository) { }
 
   async execute({
     page,
