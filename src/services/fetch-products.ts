@@ -14,7 +14,7 @@ interface FetchProductsServiceResponse {
 }
 
 export class FecthProductsService {
-  constructor(private productRepository: ProductRepository) { }
+  constructor(private productRepository: ProductRepository) {}
 
   async execute({
     page,

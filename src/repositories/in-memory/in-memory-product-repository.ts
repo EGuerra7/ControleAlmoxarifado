@@ -30,6 +30,10 @@ export class InMemoryProductRepository implements ProductRepository {
     return product
   }
 
+  async getAll() {
+    return this.products
+  }
+
   async findAll(page: number) {
     const totalCount = this.products.length
     const products = this.products

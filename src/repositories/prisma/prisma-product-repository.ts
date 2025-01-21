@@ -34,6 +34,12 @@ export class PrismaProductRepostitory implements ProductRepository {
     return { products, totalCount }
   }
 
+  async getAll() {
+    const products = await prisma.product.findMany()
+
+    return products
+  }
+
   async findById(id: string) {
     const product = await prisma.product.findUnique({
       where: {
