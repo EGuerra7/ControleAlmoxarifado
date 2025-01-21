@@ -7,6 +7,10 @@ interface FetchLoansServiceRequest {
 
 interface FetchLoansServiceResponse {
   loans: Loan[]
+  meta: {
+    totalCount: number
+    totalPages: number
+  }
 }
 
 export class FecthLoansService {
@@ -15,8 +19,14 @@ export class FecthLoansService {
   async execute({
     page,
   }: FetchLoansServiceRequest): Promise<FetchLoansServiceResponse> {
-    const loans = await this.loanRepository.findAll(page)
+    const { loans, totalCount } = await this.loanRepository.findAll(page)
+    const totalPages = Math.ceil(totalCount / 10)
 
-    return { loans }
+    return {
+      loans, meta: {
+        totalCount,
+        totalPages,
+      }
+    }
   }
 }

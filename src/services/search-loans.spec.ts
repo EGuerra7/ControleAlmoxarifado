@@ -44,6 +44,7 @@ describe('Search Loan Service', () => {
 
   it('should be able to search the loan by responsible', async () => {
     const { loans } = await sut.execute({
+      page: 1,
       responsible: 'Erick Guerra',
     })
 
@@ -56,6 +57,7 @@ describe('Search Loan Service', () => {
 
   it('should be able to search the loan by state', async () => {
     const { loans } = await sut.execute({
+      page: 1,
       state: 'COMPLETED',
     })
 
@@ -68,6 +70,7 @@ describe('Search Loan Service', () => {
 
   it('should be able to search the loan by responsible and state', async () => {
     const { loans } = await sut.execute({
+      page: 1,
       responsible: 'Erick Guerra',
       state: 'LOAN',
     })
@@ -76,5 +79,24 @@ describe('Search Loan Service', () => {
     expect(loans).toEqual([
       expect.objectContaining({ responsible: 'Erick Guerra', state: 'LOAN' }),
     ])
+  })
+
+  it('should be able to see how much items are searched, and ho many pages have', async () => {
+    for (let i = 4; i <= 12; i++) {
+      await loanRepository.create({
+        id: `${i}`,
+        responsible: 'Anonymous',
+        state: 'COMPLETED',
+        created_at: new Date(),
+      })
+    }
+
+    const { loans, meta } = await sut.execute({
+      page: 2,
+    })
+
+    expect(loans).toEqual([expect.objectContaining({ id: '11' }), expect.objectContaining({ id: '12' }),])
+    expect(meta.totalCount).toEqual(12)
+    expect(meta.totalPages).toEqual(2)
   })
 })

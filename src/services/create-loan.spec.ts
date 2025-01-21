@@ -4,6 +4,7 @@ import { InMemoryLoanProductsRepository } from 'src/repositories/in-memory/in-me
 import { CreateLoanService } from './create-loan'
 import { InMemoryProductRepository } from 'src/repositories/in-memory/in-memory-product-repository'
 import { InsufficientStockError } from './errors/insufficient-stock-error'
+import { InvalidLoanError } from './errors/invalid-loan-error'
 
 let loanRepository: InMemoryLoanRepository
 let loanProductsRepository: InMemoryLoanProductsRepository
@@ -97,7 +98,7 @@ describe('Create Loan Service', () => {
     ).rejects.toBeInstanceOf(InsufficientStockError)
   })
 
-  it('should be not able change the product amount with the loan amount', async () => {
+  it('should be able change the product amount with the loan amount', async () => {
     await sut.execute({
       responsible: 'Erick Guerra',
       products: [
@@ -120,5 +121,12 @@ describe('Create Loan Service', () => {
       expect.objectContaining({ name: 'Scissors', quantity: 0 }),
       expect.objectContaining({ name: 'Eraser', quantity: 1 }),
     ])
+  })
+
+  it('should be not able create a loan without products', async () => {
+    await expect(() => sut.execute({
+      responsible: 'Erick Guerra',
+      products: [],
+    })).rejects.toBeInstanceOf(InvalidLoanError)
   })
 })

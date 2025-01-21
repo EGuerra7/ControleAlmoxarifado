@@ -3,7 +3,7 @@ import { LoanRepository } from '../loan-repository'
 import { prisma } from 'src/lib/prisma'
 
 export class PrismaLoanRepostitory implements LoanRepository {
-  async search(responsible?: string, state?: State): Promise<Loan[]> {
+  async search(page: number, responsible?: string, state?: State) {
     const searchedLoans = await prisma.loan.findMany({
       where: {
         responsible: responsible
@@ -14,6 +14,8 @@ export class PrismaLoanRepostitory implements LoanRepository {
       orderBy: {
         created_at: 'asc',
       },
+      take: 10,
+      skip: (page - 1) * 10,
       include: {
         products: {
           include: {
@@ -23,7 +25,10 @@ export class PrismaLoanRepostitory implements LoanRepository {
       },
     })
 
-    return searchedLoans
+    const totalCount = searchedLoans.length
+
+
+    return { loans: searchedLoans, totalCount }
   }
 
   async findById(id: string) {
@@ -44,12 +49,34 @@ export class PrismaLoanRepostitory implements LoanRepository {
   }
 
   async findAll(page: number) {
+    const totalCount = await prisma.loan.count()
+
     const loans = await prisma.loan.findMany({
       orderBy: {
         created_at: 'asc',
       },
       take: 10,
       skip: (page - 1) * 10,
+      include: {
+        products: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    })
+
+    return { loans, totalCount }
+  }
+
+  async findState(state: State) {
+    const loans = await prisma.loan.findMany({
+      orderBy: {
+        created_at: 'asc',
+      },
+      where: {
+        state,
+      },
       include: {
         products: {
           include: {

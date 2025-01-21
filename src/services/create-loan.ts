@@ -4,6 +4,7 @@ import { Loan } from '@prisma/client'
 import { LoanRepository } from 'src/repositories/loan-repository'
 import { ResourseNotFoundError } from './errors/resource-not-find-error'
 import { InsufficientStockError } from './errors/insufficient-stock-error'
+import { InvalidLoanError } from './errors/invalid-loan-error'
 
 interface CreateLoanServiceRequest {
   responsible: string
@@ -23,12 +24,29 @@ export class CreateLoanService {
     private loanRepository: LoanRepository,
     private loanProductsRepository: LoanProductsRepository,
     private productRepository: ProductRepository,
-  ) {}
+  ) { }
 
   async execute({
     responsible,
     products,
   }: CreateLoanServiceRequest): Promise<CreateLoanServiceResponse> {
+
+    if (!products || products.length === 0) {
+      throw new InvalidLoanError()
+    }
+
+    for (let i = 0; i < products.length; i++) {
+      const product = await this.productRepository.findById(products[i].id)
+
+      if (!product) {
+        throw new ResourseNotFoundError()
+      }
+
+      if (product.quantity < products[i].loan_quantity) {
+        throw new InsufficientStockError()
+      }
+    }
+
     const loan = await this.loanRepository.create({
       responsible,
       state: 'LOAN',
@@ -40,10 +58,6 @@ export class CreateLoanService {
 
       if (!product) {
         throw new ResourseNotFoundError()
-      }
-
-      if (product.quantity < products[i].loan_quantity) {
-        throw new InsufficientStockError()
       }
 
       const newQuantity = product.quantity - products[i].loan_quantity

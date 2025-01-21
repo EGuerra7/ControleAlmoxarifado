@@ -9,7 +9,7 @@ interface ReturnProductsServiceRequest {
   loanId: string
   products: {
     id: string
-    returnQuantity: number
+    return_quantity: number
   }[]
 }
 
@@ -22,7 +22,7 @@ export class ReturnProductsService {
     private loanProductsRepository: LoanProductsRepository,
     private loanRepository: LoanRepository,
     private productRepository: ProductRepository,
-  ) {}
+  ) { }
 
   async execute({
     loanId,
@@ -54,17 +54,17 @@ export class ReturnProductsService {
         throw new ResourseNotFoundError()
       }
 
-      if (products[i].returnQuantity > loanProduct.loan_quantity) {
+      if (products[i].return_quantity > loanProduct.loan_quantity) {
         throw new InvalidReturnError()
       }
 
       await this.loanProductsRepository.updateReturnQuantity(
         loanId,
         product.id,
-        products[i].returnQuantity,
+        products[i].return_quantity,
       )
 
-      const newQuantity = product.quantity + products[i].returnQuantity
+      const newQuantity = product.quantity + products[i].return_quantity
 
       await this.productRepository.updateQuantity(product.id, newQuantity)
     }

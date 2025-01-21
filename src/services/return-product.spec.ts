@@ -68,11 +68,11 @@ describe('Return Products Service', () => {
       products: [
         {
           id: '1',
-          returnQuantity: 1,
+          return_quantity: 1,
         },
         {
           id: '2',
-          returnQuantity: 2,
+          return_quantity: 2,
         },
       ],
     })
@@ -93,11 +93,11 @@ describe('Return Products Service', () => {
       products: [
         {
           id: '1',
-          returnQuantity: 1,
+          return_quantity: 1,
         },
         {
           id: '2',
-          returnQuantity: 2,
+          return_quantity: 2,
         },
       ],
     })
@@ -116,11 +116,11 @@ describe('Return Products Service', () => {
       products: [
         {
           id: '1',
-          returnQuantity: 1,
+          return_quantity: 1,
         },
         {
           id: '2',
-          returnQuantity: 2,
+          return_quantity: 2,
         },
       ],
     })
@@ -131,11 +131,11 @@ describe('Return Products Service', () => {
         products: [
           {
             id: '1',
-            returnQuantity: 1,
+            return_quantity: 1,
           },
           {
             id: '2',
-            returnQuantity: 2,
+            return_quantity: 2,
           },
         ],
       }),

@@ -5,7 +5,7 @@ import { FecthLoansService } from './fetch-loans'
 let loanRepository: InMemoryLoanRepository
 let sut: FecthLoansService
 
-describe('Fetch Products Service', () => {
+describe('Fetch Loans Service', () => {
   beforeEach(() => {
     loanRepository = new InMemoryLoanRepository()
     sut = new FecthLoansService(loanRepository)
@@ -57,7 +57,7 @@ describe('Fetch Products Service', () => {
     ])
   })
 
-  it('should be able to fetch paginated products', async () => {
+  it('should be able to fetch paginated loans and see the amount of loans', async () => {
     for (let i = 1; i <= 12; i++) {
       loanRepository.create({
         id: `${i}`,
@@ -67,10 +67,12 @@ describe('Fetch Products Service', () => {
       })
     }
 
-    const { loans } = await sut.execute({
+    const { loans, meta } = await sut.execute({
       page: 2,
     })
 
     expect(loans).toHaveLength(2)
+    expect(meta.totalCount).toEqual(12)
+    expect(meta.totalPages).toEqual(2)
   })
 })

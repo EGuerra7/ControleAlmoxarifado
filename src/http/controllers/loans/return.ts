@@ -11,7 +11,7 @@ export async function returnProduct(
     products: z.array(
       z.object({
         id: z.string().uuid(),
-        returnQuantity: z.number(),
+        return_quantity: z.number(),
       }),
     ),
   })
