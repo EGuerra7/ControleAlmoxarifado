@@ -12,7 +12,7 @@ export class PrismaLoanRepostitory implements LoanRepository {
         state: state || undefined,
       },
       orderBy: {
-        created_at: 'asc',
+        created_at: 'desc',
       },
       take: 10,
       skip: (page - 1) * 10,
@@ -25,7 +25,15 @@ export class PrismaLoanRepostitory implements LoanRepository {
       },
     })
 
-    const totalCount = searchedLoans.length
+    const totalCount = await prisma.loan.count({
+      where: {
+        responsible: responsible
+          ? { contains: responsible.toLowerCase(), mode: 'insensitive' }
+          : undefined,
+        state: state || undefined,
+      },
+    })
+
 
 
     return { loans: searchedLoans, totalCount }
@@ -53,7 +61,7 @@ export class PrismaLoanRepostitory implements LoanRepository {
 
     const loans = await prisma.loan.findMany({
       orderBy: {
-        created_at: 'asc',
+        created_at: 'desc',
       },
       take: 10,
       skip: (page - 1) * 10,
@@ -72,7 +80,7 @@ export class PrismaLoanRepostitory implements LoanRepository {
   async findState(state: State) {
     const loans = await prisma.loan.findMany({
       orderBy: {
-        created_at: 'asc',
+        created_at: 'desc',
       },
       where: {
         state,

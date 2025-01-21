@@ -19,45 +19,51 @@ enum State {
 }
 
 model Product {
-  id String @id @default(uuid())
-  name String
-  quantity Int
+  id           String @id @default(uuid())
+  name         String
+  quantity     Int
   localization String
-  category String
+  category     String
 
-  Loans LoanProduct[] 
+  Loans LoanProduct[]
 
   @@map("products")
 }
 
-model Loan{
-  id String @id @default(uuid())
+model Loan {
+  id          String   @id @default(uuid())
   responsible String
-  state State @default(LOAN)
-  created_at DateTime
+  state       State    @default(LOAN)
+  created_at  DateTime
 
   products LoanProduct[]
+
   @@map("loans")
 }
 
 model LoanProduct {
-    id String @id @default(uuid())
-    product_id String
-    loan_id String
-    loan_quantity Int
-    return_quantity Int @default(0)
+  id              String @id @default(uuid())
+  product_id      String
+  loan_id         String
+  loan_quantity   Int
+  return_quantity Int    @default(0)
 
-    product Product @relation(fields: [product_id], references: [id])
-    loan Loan @relation(fields: [loan_id], references: [id])
-    
-    @@unique([product_id, loan_id])
-    @@map("loan_products")
+  product Product @relation(fields: [product_id], references: [id])
+  loan    Loan    @relation(fields: [loan_id], references: [id])
+
+  @@unique([product_id, loan_id])
+  @@map("loan_products")
 }
 
 model Admin {
-  id String @id @default(uuid())
-  user String @unique
+  id       String @id @default(uuid())
+  user     String @unique
   password String
 
   @@map("admin")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
 }

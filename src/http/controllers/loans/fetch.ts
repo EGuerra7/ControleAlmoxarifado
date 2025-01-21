@@ -7,14 +7,14 @@ export async function fetch(request: FastifyRequest, reply: FastifyReply) {
     page: z.coerce.number().min(1).default(1),
   })
 
-  const { page } = fetchLoansQuerySchema.parse(request.params)
+  const { page } = fetchLoansQuerySchema.parse(request.query)
   const fetchloansService = makeFetchLoansService()
 
-  const { loans } = await fetchloansService.execute({
+  const { loans, meta } = await fetchloansService.execute({
     page,
   })
 
   return reply.status(200).send({
-    loans,
+    loans, meta
   })
 }

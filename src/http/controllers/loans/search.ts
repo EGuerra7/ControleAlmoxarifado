@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 export async function search(request: FastifyRequest, reply: FastifyReply) {
   const searchLoansQuerySchema = z.object({
+    page: z.coerce.number().default(1),
     responsible: z.string().optional(),
     state: z
       .string()
@@ -13,15 +14,17 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
       ),
   })
 
-  const { responsible, state } = searchLoansQuerySchema.parse(request.query)
+  const { page, responsible, state } = searchLoansQuerySchema.parse(request.query)
   const searchLoansService = makeSearchLoansService()
 
-  const { loans } = await searchLoansService.execute({
+  const { loans, meta } = await searchLoansService.execute({
+    page,
     responsible,
     state,
   })
 
   return reply.status(200).send({
     loans,
+    meta
   })
 }
