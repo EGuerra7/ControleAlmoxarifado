@@ -8,7 +8,7 @@ export interface ProductRepository {
   ): Promise<{ products: Product[]; totalCount: number }>
   findById(id: string): Promise<Product | null>
   getAll(): Promise<Product[]>
-  findAll(page: number): Promise<{ products: Product[], totalCount: number }>
+  findAll(page: number): Promise<{ products: Product[]; totalCount: number }>
   save(data: Product): Promise<Product>
   updateQuantity(productId: string, newQuantity: number): Promise<Product>
   create(data: Prisma.ProductCreateInput): Promise<Product>

@@ -14,7 +14,9 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
       ),
   })
 
-  const { page, responsible, state } = searchLoansQuerySchema.parse(request.query)
+  const { page, responsible, state } = searchLoansQuerySchema.parse(
+    request.query,
+  )
   const searchLoansService = makeSearchLoansService()
 
   const { loans, meta } = await searchLoansService.execute({
@@ -25,6 +27,6 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
 
   return reply.status(200).send({
     loans,
-    meta
+    meta,
   })
 }

@@ -14,10 +14,10 @@ export async function authenticate(
   const { user, password } = authenticateBodySchema.parse(request.body)
   const authenticateAdminService = makeAuthenticateAdminService()
 
-  await authenticateAdminService.execute({
+  const admin = await authenticateAdminService.execute({
     user,
     password,
   })
 
-  return reply.status(200).send()
+  return reply.status(200).send({ admin })
 }
