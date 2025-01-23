@@ -1,5 +1,5 @@
 export class InvalidReturnError extends Error {
   constructor() {
-    super('Invalid return to loan.')
+    super('Retorno inválido.')
   }
 }
