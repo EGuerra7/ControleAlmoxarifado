@@ -15,6 +15,7 @@ export async function fetch(request: FastifyRequest, reply: FastifyReply) {
   })
 
   return reply.status(200).send({
-    loans, meta
+    loans,
+    meta,
   })
 }

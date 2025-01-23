@@ -1,4 +1,4 @@
-import { State, Loan, Prisma } from '@prisma/client'
+import { State, Prisma } from '@prisma/client'
 import { LoanRepository } from '../loan-repository'
 import { prisma } from 'src/lib/prisma'
 
@@ -33,8 +33,6 @@ export class PrismaLoanRepostitory implements LoanRepository {
         state: state || undefined,
       },
     })
-
-
 
     return { loans: searchedLoans, totalCount }
   }

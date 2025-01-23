@@ -40,12 +40,11 @@ export class InMemoryLoanRepository implements LoanRepository {
       )
       .splice((page - 1) * 10, page * 10)
 
-
     return { loans, totalCount }
   }
 
   async findState(state: State) {
-    return this.loans.filter(loan => loan.state === state)
+    return this.loans.filter((loan) => loan.state === state)
   }
 
   async updateStatus(id: string, status: State) {
