@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
-    "start": "node public/server.cjs",
-    "build": "tsup src --out-dir public",
+    "start": "node build/server.cjs",
+    "build": "tsup src --out-dir build",
     "vercel-build": "npx prisma migrate deploy",
     "test": "vitest run --dir src/services",
     "test:watch": "vitest --dir src/services"
