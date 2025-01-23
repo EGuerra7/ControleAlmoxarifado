@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
-    "start": "node build/server.cjs",
+    "start": "node public/server.cjs",
     "build": "tsup src --out-dir public",
     "test": "vitest run --dir src/services",
     "test:watch": "vitest --dir src/services"
