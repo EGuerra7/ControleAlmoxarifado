@@ -9,7 +9,12 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ['esbuild'], // Exclui esbuild do bundle
+      input: [
+        'src/app.ts',
+        'src/server.ts',
+        // Adicione os outros arquivos aqui
+      ],
+      external: ['esbuild'], // Caso queira excluir esbuild
     },
   },
 })
