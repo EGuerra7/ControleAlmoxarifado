@@ -7,4 +7,9 @@ export default defineConfig({
     environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
     dir: 'src',
   },
+  build: {
+    rollupOptions: {
+      external: ['esbuild'], // Exclui esbuild do bundle
+    },
+  },
 })
